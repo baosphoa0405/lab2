@@ -157,4 +157,27 @@ public class HistoryDAO {
         }
         return listHistory;
     }
+
+    public ArrayList<HistoryDTO> getListHistoryByPromotionID(int promotionID) throws NamingException, SQLException {
+        HistoryDTO history = null;
+        ArrayList<HistoryDTO> listHistory = new ArrayList<>();
+        try {
+            cn = DBHelper.makeConnection();
+            if (cn != null) {
+                String sql = "select u.userID, p.promotionID, p.promotionName, s.statusID, s.statusName, r.rankID, r.rankValue, h.assignDate from Histories h, Promotions p, Status s, Ranks r, Users u \n"
+                        + "where h.promotionID =p.promotionID and h.userID = u.userID and r.rankID = h.rankID and h.statusID = s.statusID \n"
+                        + "and p.promotionID = ? order by h.assignDate DESC";
+                pstm = cn.prepareStatement(sql);
+                pstm.setInt(1, promotionID);
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    history = new HistoryDTO(rs.getString("userID"), rs.getDate("assignDate"), new PromotionDTO(rs.getInt("promotionID"), rs.getString("promotionName")), new StatusDTO(rs.getInt("statusID"), rs.getString("statusName")), new RankDTO(rs.getInt("rankID"), rs.getInt("rankValue")));
+                    listHistory.add(history);
+                }
+            }
+        } finally {
+            close();
+        }
+        return listHistory;
+    }
 }

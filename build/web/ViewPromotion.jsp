@@ -19,6 +19,7 @@
                 <tr>
                     <th>promotionID</th>
                     <th>promotionName</th>
+                    <th>view list user</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,10 @@
                     <tr>
                         <td>${item.promotionID}</td>
                         <td>${item.promotionName}</td>
+                        <td><form method="POST" action="viewDetailByPromotionID">
+                                <input type="hidden" name="promotionID" value="${item.promotionID}" />
+                                <input type="submit" value="View Detail " />
+                            </form></td>
                     </tr>
                 </c:forEach>
             </tbody>
