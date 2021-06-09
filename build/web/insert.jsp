@@ -13,6 +13,7 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <h1>Insert Page</h1>
         <h1 style="color: green">${requestScope.success}</h1>
         <form method="POST" action="insert" enctype="multipart/form-data">
             UserID <input type="text" name="userID" value="${requestScope.userNew.userID}" /><br/>
@@ -36,7 +37,6 @@
             phone <input type="text" name="phone" value="${requestScope.userNew.phone}" /><br/>
             <p style="color: red">${requestScope.usersError.errorPhone}</p>
             <p style="color: red">${requestScope.usersError.errorPhoneFormat}</p>
-            <p style="color: red">${requestScope.usersError.errorPhoneLength}</p>
             <label for="Role">Roles</label>
             <select id="Role" name="role">
                 <c:forEach items="${requestScope.listRole}" var="item">

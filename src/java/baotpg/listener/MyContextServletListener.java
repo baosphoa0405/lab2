@@ -23,7 +23,7 @@ import javax.servlet.ServletContextListener;
  */
 public class MyContextServletListener implements ServletContextListener {
 
-    private final String PATH = "/WEB-INF/newproperties.properties";
+    private final String PATH = "/WEB-INF/properties.properties";
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

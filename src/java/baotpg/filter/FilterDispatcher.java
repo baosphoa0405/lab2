@@ -5,6 +5,7 @@
  */
 package baotpg.filter;
 
+import baotpg.users.UserDTO;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -19,6 +20,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -103,8 +106,15 @@ public class FilterDispatcher implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
 
+        res.setHeader("Cache-Control", "no-cache, no-store");
+        res.setHeader("Pragma", "no-cache");
+        res.setDateHeader("Expires", 0);
+        HttpSession session = req.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("user");
         String uri = req.getRequestURI();
+
         try {
             int lastIndex = uri.lastIndexOf("/");
             String resource = uri.substring(lastIndex + 1);
@@ -112,9 +122,18 @@ public class FilterDispatcher implements Filter {
             ServletContext context = request.getServletContext();
             Map<String, String> siteMap = (Map<String, String>) context.getAttribute("SITE_MAP");
             String url = siteMap.get(resource);
+
             if (url != null) {
-                RequestDispatcher rd = request.getRequestDispatcher(url);
-                rd.forward(request, response);
+                if (user == null && url.equals("LoginServlet")) {
+                    RequestDispatcher rd = request.getRequestDispatcher(url);
+                    rd.forward(request, response);
+                } else if (user == null) {
+                    RequestDispatcher rd = request.getRequestDispatcher("login.html");
+                    rd.forward(request, response);
+                } else {
+                    RequestDispatcher rd = request.getRequestDispatcher(url);
+                    rd.forward(request, response);
+                }
             } else {
                 chain.doFilter(request, response);
             }

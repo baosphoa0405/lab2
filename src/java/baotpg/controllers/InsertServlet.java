@@ -86,7 +86,7 @@ public class InsertServlet extends HttpServlet {
             }
             if (!userID.trim().isEmpty() && !userID.matches("[uU][0-9]{3}")) {
                 flag = true;
-                usersError.setErrorIDformat("user ID must Format U{3} | u{3}");
+                usersError.setErrorIDformat("user ID must Format U{3} | u{3} ");
             }
             if (!userID.trim().isEmpty() && checkUserID) {
                 flag = true;
@@ -137,13 +137,9 @@ public class InsertServlet extends HttpServlet {
                 flag = true;
                 usersError.setErrorPhone("phone is empty");
             }
-            if (!phone.trim().isEmpty() && phone.trim().length() < 1 || phone.trim().length() > 12) {
+            if (!phone.trim().isEmpty() && !phone.matches("[0-9]{10}")) {
                 flag = true;
-                usersError.setErrorPhoneLength("phone must length 10 | 11 number");
-            }
-            if (!phone.trim().isEmpty() && !phone.matches("[0-9]{9}")) {
-                flag = true;
-                usersError.setErrorPhoneFormat("phone must number and 9 number");
+                usersError.setErrorPhoneFormat("phone must number and 10 number");
             }
             if (fileName.isEmpty()) {
                 flag = true;
